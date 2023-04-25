@@ -8,6 +8,8 @@ import com.pblgllgs.cards.model.Cards;
 import com.pblgllgs.cards.model.Customer;
 import com.pblgllgs.cards.model.Properties;
 import com.pblgllgs.cards.repository.CardsRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,8 @@ import java.util.List;
 
 @RestController
 public class CardsController {
+
+    private static final Logger logger = LoggerFactory.getLogger(CardsController.class);
     @Autowired
     private CardsRepository cardsRepository;
 
@@ -22,10 +26,12 @@ public class CardsController {
     CardsServiceConfig cardsConfig;
 
     @PostMapping("/myCards")
-    public List<Cards> getAccountDetails(
+    public List<Cards> getCardsDetails(
             @RequestHeader("pblgllgs-correlation-id") String correlationid,
             @RequestBody Customer customer){
+        logger.info("getCardsDetails() method started");
         List<Cards> cards =  cardsRepository.findByCustomerId(customer.getCustomerId());
+        logger.info("getCardsDetails() method ended");
         if(cards != null){
             return cards;
         }else{
